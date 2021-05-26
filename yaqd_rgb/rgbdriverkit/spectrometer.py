@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# type: ignore
 
 __author__ = "RGB Photonics GmbH"
 
@@ -8,8 +9,8 @@ except:
     from abc import ABCMeta, abstractmethod, abstractproperty # Python 2.7
 
 
-import rgbdriverkit.devicedriver as devicedriver
-from rgbdriverkit.helpers import enum
+from . import devicedriver
+from .helpers import enum
 
 import logging
 

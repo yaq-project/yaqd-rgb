@@ -1,12 +1,13 @@
 #!/usr/bin/env python
+# type: ignore
 
 __author__ = "RGB Photonics GmbH"
 
 from datetime import datetime
 
-import rgbdriverkit.spectrometer as spectrometer
-from rgbdriverkit.helpers import enum
-from rgbdriverkit.spectrometer import SpectrometerStatus
+from . import spectrometer
+from .helpers import enum
+from .spectrometer import SpectrometerStatus
 
 import logging
 
@@ -14,7 +15,7 @@ _logger = logging.getLogger('rgb.calibrspectr')
 
 # Try to load module and store class name to separate variable
 try:
-    import rgbdriverkit.calibrspectrometerdata as calibratedspectrometerdata
+    from . import calibratedspectrometerdata
     _calibratedspectrometerdata_class = calibratedspectrometerdata.CalibratedSpectrometer
     _USE_INTERNAL = 1 # Use module calibratedspectrometerdata for internal use
 except ImportError:

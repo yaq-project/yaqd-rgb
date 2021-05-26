@@ -33,3 +33,7 @@ Notice of changes from upstream:
 qseriesdriver.py was edited to avoid the call to `is_kernel_driver_active` on 
 Windows platform, as that method raises NotImplementedError.
 Otherwise, the library works as intended on Windows as well as Posix systems.
+
+Internal imports were modified to be relative imports rather than absolute.
+
+`# type: ignore` statements were added so mypy passes on non-vendored code.

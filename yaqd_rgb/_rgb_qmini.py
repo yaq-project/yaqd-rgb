@@ -5,7 +5,7 @@ from typing import Dict, Any, List
 
 from yaqd_core import HasMapping, HasMeasureTrigger, IsSensor, IsDaemon
 
-from .rgbdriverkit.qseriesdriver import Qseries
+from .rgbdriverkit.qseriesdriver import Qseries  # type: ignore
 
 
 class RGBQmini(HasMapping, HasMeasureTrigger, IsSensor, IsDaemon):

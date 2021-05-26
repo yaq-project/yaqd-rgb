@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# type: ignore
 
 __author__ = "RGB Photonics GmbH"
 
@@ -8,11 +9,11 @@ import struct
 import sys
 import datetime as datetime
 
-import rgbdriverkit.calibratedspectrometer as calibratedspectrometer
-from rgbdriverkit.spectrometer import SpectrometerStatus
-from rgbdriverkit.spectrometer import SpectrometerTriggerOptions
+from . import calibratedspectrometer
+from .spectrometer import SpectrometerStatus
+from .spectrometer import SpectrometerTriggerOptions
 
-from rgbdriverkit.helpers import enum
+from .helpers import enum
 
 import logging
 
