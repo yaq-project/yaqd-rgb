@@ -4,7 +4,8 @@
 Helper functions used by the rgbdriverkit
 """
 
-__author__ = 'RGB Photonics GmbH'
+__author__ = "RGB Photonics GmbH"
+
 
 def enum(**enums):
-    return type('Enum', (), enums)
+    return type("Enum", (), enums)

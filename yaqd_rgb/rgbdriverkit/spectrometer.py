@@ -4,9 +4,9 @@
 __author__ = "RGB Photonics GmbH"
 
 try:
-    from abc import ABC, abstractmethod, abstractproperty # Python 3.4+
+    from abc import ABC, abstractmethod, abstractproperty  # Python 3.4+
 except:
-    from abc import ABCMeta, abstractmethod, abstractproperty # Python 2.7
+    from abc import ABCMeta, abstractmethod, abstractproperty  # Python 2.7
 
 
 from . import devicedriver
@@ -14,7 +14,8 @@ from .helpers import enum
 
 import logging
 
-_logger = logging.getLogger('rgb.spectrometer')
+_logger = logging.getLogger("rgb.spectrometer")
+
 
 class Spectrometer(devicedriver.Device):
     """Base class for spectrometers"""
@@ -25,9 +26,9 @@ class Spectrometer(devicedriver.Device):
             super().__init__()
         except:
             _logger.debug("Instantiating " + str(Spectrometer.__class__))
-            super(Spectrometer, self).__init__() # Python 2 equivalent new-style classes
+            super(Spectrometer, self).__init__()  # Python 2 equivalent new-style classes
         self._averaging = 1
-        self._pixel_count = 0 # IMPORTANT: This value may be accessed from an exposure thread. It must therefore not be changed after initialization.
+        self._pixel_count = 0  # IMPORTANT: This value may be accessed from an exposure thread. It must therefore not be changed after initialization.
         self._min_exposure_time = 0
         self._max_exposure_time = 0
         self._max_averaging = 1
@@ -38,8 +39,10 @@ class Spectrometer(devicedriver.Device):
 
     def get_exposure_time(self):
         pass
+
     def set_exposure_time(self, value):
         pass
+
     exposure_time = abstractproperty(get_exposure_time, set_exposure_time)
 
     # on_exposure_time_changed event handler
@@ -47,6 +50,7 @@ class Spectrometer(devicedriver.Device):
     @property
     def averaging(self):
         return self._averaging
+
     @averaging.setter
     def averaging(self, value):
         if value > self._max_averaging:
@@ -54,7 +58,7 @@ class Spectrometer(devicedriver.Device):
         if value < 1:
             raise ValueError("Averaging must be positive")
         self._averaging = value
-        #onaveragingchanged()
+        # onaveragingchanged()
 
     # on_averaging_changed() event handler
 
@@ -113,13 +117,14 @@ class Spectrometer(devicedriver.Device):
         Should be 4 elements containing constant [0], linear [1], quadratic [2] and cubic [3]
         term of the 3rd order polynominal used for calculating the wavelengths. Wavelengths are in nm."""
         return self._wavelength_coefficients
+
     @wavelength_coefficients.setter
     def wavelength_coefficients(self, value):
         self._wavelength_coefficients = value
 
     def get_wavelengths(self):
         _logger.debug("Compute wavelengths (in nm) from coefficients...")
-        if (self._wavelength_coefficients == None or len(self._wavelength_coefficients) < 2):
+        if self._wavelength_coefficients == None or len(self._wavelength_coefficients) < 2:
             raise ValueError("Not enough wavelength coefficients")
         calibr0 = self._wavelength_coefficients[0]
         calibr1 = self._wavelength_coefficients[1]
@@ -132,7 +137,9 @@ class Spectrometer(devicedriver.Device):
         isqu = float
         for i in range(self._pixel_count):
             isqu = float(i * i)
-            lambda_nm[i] = calibr3 * isqu * float(i) + calibr2 * isqu + calibr1 * float(i) + calibr0
+            lambda_nm[i] = (
+                calibr3 * isqu * float(i) + calibr2 * isqu + calibr1 * float(i) + calibr0
+            )
 
         return lambda_nm
 
@@ -171,7 +178,7 @@ class Spectrometer(devicedriver.Device):
 
     def get_io_pin(self, pin):
         """Gets an IO pin input state with pin number starting at 0."""
-        return ( (self.io_pins & (1 << pin)) != 0 )
+        return (self.io_pins & (1 << pin)) != 0
 
     @property
     def io_pins(self):
@@ -183,6 +190,7 @@ class Spectrometer(devicedriver.Device):
     def external_trigger_source(self):
         """Gets or sets the I/O pin to be used as the external trigger source."""
         return -1
+
     @external_trigger_source.setter
     def external_trigger_source(self, value):
         raise NotImplementedError("Not supported.")
@@ -191,6 +199,7 @@ class Spectrometer(devicedriver.Device):
     def external_trigger_rising_edge(self):
         """Gets or sets a value indicating whether to trigger on the rising or falling edge of the external trigger source."""
         return self._external_trigger_rising_edge
+
     @external_trigger_rising_edge.setter
     def external_trigger_rising_edge(self, value):
         self._external_trigger_rising_edge = value
@@ -199,6 +208,7 @@ class Spectrometer(devicedriver.Device):
     def trigger_option(self):
         """Gets or sets the trigger option."""
         return SpectrometerTriggerOptions.FreeRunningTriggerEnd
+
     @trigger_option.setter
     def trigger_option(self, value):
         raise NotImplementedError("Not supported.")
@@ -211,6 +221,7 @@ class Spectrometer(devicedriver.Device):
     def use_external_trigger(self):
         """Gets or sets a value indicating whether to use the external trigger when taking spectra."""
         return False
+
     @use_external_trigger.setter
     def use_external_trigger(self, value):
         if value:
@@ -232,34 +243,33 @@ class Spectrometer(devicedriver.Device):
         """Gets the internal device temperature. (in degree Celcius)"""
         raise NotImplementedError("Not supported.")
 
+
 # Enumerations
 
 """An enumeration of the values returned by the Status property of a spectrometer class."""
 SpectrometerStatus = enum(
-        Idle = 0,
-        WaitingForTrigger = 1,
-        TakingSpectrum = 2,
-        NotReady = -1,
-        Busy = -2,
-        Error = -3,
-        Closed = -4,
-        )
+    Idle=0,
+    WaitingForTrigger=1,
+    TakingSpectrum=2,
+    NotReady=-1,
+    Busy=-2,
+    Error=-3,
+    Closed=-4,
+)
 
 """An enumeration representing the different trigger options for a spectrometer."""
 SpectrometerTriggerOptions = enum(
-        FreeRunningTriggerEnd = 0,
-        FreeRunningTriggerStart = 1,
-        HardwareTriggered = 2
-        )
+    FreeRunningTriggerEnd=0, FreeRunningTriggerStart=1, HardwareTriggered=2
+)
 
 """An enumeration of the spectrometer I/O configuraiton values."""
 SpectrometerIOConfiguration = enum(
-        OutputConstantLow = 0,
-        OutputConstantHigh = 1,
-        OutputDuringExpLow = 2,
-        OutputDuringExpHigh = 3,
-        Input = 4,
-        OutputPulsed = 8,
-        OutputDuringExpPulsedLow = 10,
-        OutputDuringExpPulsedHigh = 11,
-        )
+    OutputConstantLow=0,
+    OutputConstantHigh=1,
+    OutputDuringExpLow=2,
+    OutputDuringExpHigh=3,
+    Input=4,
+    OutputPulsed=8,
+    OutputDuringExpPulsedLow=10,
+    OutputDuringExpPulsedHigh=11,
+)

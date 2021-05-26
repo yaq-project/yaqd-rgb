@@ -10,19 +10,22 @@ __author__ = "RGB Photonics GmbH"
 #   @abc.abstractmethod
 
 try:
-    #from abc import ABC, abstractmethod, abstractproperty # Python 3.4+
+    # from abc import ABC, abstractmethod, abstractproperty # Python 3.4+
     import abc
-    ABC = abc.ABCMeta('ABC', (object,), {})
+
+    ABC = abc.ABCMeta("ABC", (object,), {})
 except:
-    #from abc import ABCMeta, abstractmethod, abstractproperty # Python 2.7
+    # from abc import ABCMeta, abstractmethod, abstractproperty # Python 2.7
     import abc
-    ABC = abc.ABCMeta('ABC', (object,), {}) # Python 2 and 3 compatible
+
+    ABC = abc.ABCMeta("ABC", (object,), {})  # Python 2 and 3 compatible
 
 import logging
 
-_logger = logging.getLogger('rgb.device')
+_logger = logging.getLogger("rgb.device")
 
 # ToDo: Add Exceptions class from Exceptions
+
 
 class Device(ABC):
     """Base class for all device drivers"""
@@ -87,7 +90,7 @@ class Device(ABC):
 
     @property
     def detailed_device_name(self):
-        """ Gets a detailed device name.
+        """Gets a detailed device name.
         Note to implementors: This string should be unique and correct after
         initialization and after device object is returned from search_devices()."""
         s = self._model_name
@@ -101,4 +104,3 @@ class Device(ABC):
         if other_device is None:
             raise ValueError()
         return other_device.detailed_device_name == self.detailed_device_name
-

@@ -11,16 +11,18 @@ from .spectrometer import SpectrometerStatus
 
 import logging
 
-_logger = logging.getLogger('rgb.calibrspectr')
+_logger = logging.getLogger("rgb.calibrspectr")
 
 # Try to load module and store class name to separate variable
 try:
     from . import calibratedspectrometerdata
+
     _calibratedspectrometerdata_class = calibratedspectrometerdata.CalibratedSpectrometer
-    _USE_INTERNAL = 1 # Use module calibratedspectrometerdata for internal use
+    _USE_INTERNAL = 1  # Use module calibratedspectrometerdata for internal use
 except ImportError:
     _calibratedspectrometerdata_class = object
     _USE_INTERNAL = 0
+
 
 class CalibratedSpectrometer(spectrometer.Spectrometer, _calibratedspectrometerdata_class):
     """A spectrometer that supports pre-processing of the spectra.
@@ -36,14 +38,16 @@ class CalibratedSpectrometer(spectrometer.Spectrometer, _calibratedspectrometerd
 
     def __init__(self):
 
-        try: # Python 3
+        try:  # Python 3
             _logger.debug("Instantiating " + str(__class__))
             super().__init__()
-        except: # Python 2
+        except:  # Python 2
             _logger.debug("Instantiating " + str(CalibratedSpectrometer.__class__))
-            super(CalibratedSpectrometer, self).__init__() # Python 2 equivalent for new-style classes
+            super(
+                CalibratedSpectrometer, self
+            ).__init__()  # Python 2 equivalent for new-style classes
 
-        self.dark_set_values(None, None, None, 0) # clear dark spectra
+        self.dark_set_values(None, None, None, 0)  # clear dark spectra
         self._time_stamp = datetime
         self._load_level = None
         self._available_processing_steps = None
@@ -59,8 +63,8 @@ class CalibratedSpectrometer(spectrometer.Spectrometer, _calibratedspectrometerd
         self._firstOffsetPixel = 0
         self._numOffsetPixels = 0
         self._firstRealPixel = 0
-        self._numDataValues = 0 # The number of pixels in an unprocessed raw spectrum (including dark and dummy pixels).
-        self._readoutNoise = 20 # for a single exposure. Change this during initialization if better value is known.
+        self._numDataValues = 0  # The number of pixels in an unprocessed raw spectrum (including dark and dummy pixels).
+        self._readoutNoise = 20  # for a single exposure. Change this during initialization if better value is known.
         self._mirrorSpectrum = False
         # Processing step: Correct nonlinearity
         self._nonlinearity_coefficients = [1.0, 0.0, 0.0, 0.0]
@@ -68,11 +72,11 @@ class CalibratedSpectrometer(spectrometer.Spectrometer, _calibratedspectrometerd
         # Processing step: Remove permanent bad pixels
         # Processing step: Subtract dark
         self.__dark_exposure_time = -1.0
-        self._dark_spec_times = [] # None?
-        self.__dark_pixel_avg = None # None if not applicable
-        self.__dark_spec = None # None? dark_spec[exp_time_index, pixel]
+        self._dark_spec_times = []  # None?
+        self.__dark_pixel_avg = None  # None if not applicable
+        self.__dark_spec = None  # None? dark_spec[exp_time_index, pixel]
         self._dark_spec_type = 0
-        self._currentDarkSpec = [] # None?
+        self._currentDarkSpec = []  # None?
         self._currentDarkPixelAvg = float
         # Processing step: Remove temporary bad pixels
         # Processing steps: Normalize exposure time
@@ -83,19 +87,21 @@ class CalibratedSpectrometer(spectrometer.Spectrometer, _calibratedspectrometerd
         self.__sensitivity_unit = SpectrometerUnits.Unknown
         self.__sensitivity_description = ""
         self._sensitivity_smoothing_width = 0
-        self._sensitivity_smoothing = None # warning: inverse values as compared to sensitivity_calibration
+        self._sensitivity_smoothing = (
+            None  # warning: inverse values as compared to sensitivity_calibration
+        )
         # Processing step: Additional Filtering
 
         # Calibration
         self._calibration_load_error = ""
         self._can_restore_factory_calibration = False
 
-        self._calibration_temperature_wavelengths = float('nan')
-        self._calibration_temperature_nonlinearity = float('nan')
-        self._calibration_temperature_dark_spectra = float('nan')
-        self._calibration_temperature_sensitivity = float('nan')
+        self._calibration_temperature_wavelengths = float("nan")
+        self._calibration_temperature_nonlinearity = float("nan")
+        self._calibration_temperature_dark_spectra = float("nan")
+        self._calibration_temperature_sensitivity = float("nan")
 
-        self._current_spectrum = None # means exposure not startedd or spectrum alreadout read out
+        self._current_spectrum = None  # means exposure not startedd or spectrum alreadout read out
         # current_spectrum.Data == None means exposure started, but not finished yet
 
     @property
@@ -134,6 +140,7 @@ class CalibratedSpectrometer(spectrometer.Spectrometer, _calibratedspectrometerd
     def processing_steps(self):
         """Gets or sets the processing steps that are currently used when taking a spectrum."""
         return self._processing_steps
+
     @processing_steps.setter
     def processing_steps(self, value):
         self.processing_steps = value & self._available_processing_steps
@@ -146,18 +153,23 @@ class CalibratedSpectrometer(spectrometer.Spectrometer, _calibratedspectrometerd
     @property
     def raw_data(self):
         """Gets or sets a value indicating whether the raw data from the image sensor should be returned."""
-        return (self._processing_steps == 0)
+        return self._processing_steps == 0
+
     @raw_data.setter
     def raw_data(self, value):
-        if (value == (self._processing_steps == 0)):
-            return # if no change in raw_data: nothing to do here
-        if value: # if raw_data changes from False to True
-            self._previous_processing = self._processing_steps # remember previous processing steps
-            self._processing_steps = 0 # and set raw_data to True
-        else: # if raw_data changes from True to False
-            if (self._previous_processing != 0): # if the raw_data=True state was set here (otherwise: not sure what to do)
-                self._processing_steps = self._previous_processing # restore previous state
-            self._previous_processing = 0 # don't use this value next time
+        if value == (self._processing_steps == 0):
+            return  # if no change in raw_data: nothing to do here
+        if value:  # if raw_data changes from False to True
+            self._previous_processing = (
+                self._processing_steps
+            )  # remember previous processing steps
+            self._processing_steps = 0  # and set raw_data to True
+        else:  # if raw_data changes from True to False
+            if (
+                self._previous_processing != 0
+            ):  # if the raw_data=True state was set here (otherwise: not sure what to do)
+                self._processing_steps = self._previous_processing  # restore previous state
+            self._previous_processing = 0  # don't use this value next time
 
     # --- Processing spectrum
 
@@ -169,7 +181,7 @@ class CalibratedSpectrometer(spectrometer.Spectrometer, _calibratedspectrometerd
     def get_spectrum_data(self):
         """Gets the spectrum including some metadata.
         Returns an instance of the SpectrumData class that contains the data."""
-        if ( self._current_spectrum == None or self._current_spectrum.Spectrum == None ):
+        if self._current_spectrum == None or self._current_spectrum.Spectrum == None:
             raise IOError("No data to read")
         # (alternatively one could test for available_spectra == 0)
         # AdjustOffset should have been done during readout
@@ -184,11 +196,12 @@ class CalibratedSpectrometer(spectrometer.Spectrometer, _calibratedspectrometerd
     def nonlinearity_coefficients(self):
         """Gets or sets the nonlinearity coefficients."""
         return self._nonlinearity_coefficients
+
     @nonlinearity_coefficients.setter
     def nonlinearity_coefficients(self, value):
         self._nonlinearity_coefficients = value
         if self.can_read_temperature:
-            #self._calibration_temperature_nonlinearity = self.Temperature
+            # self._calibration_temperature_nonlinearity = self.Temperature
             pass
 
     def dark_set_values(self, dark_spec_times, dark_pixel_avg, dark_spec, dark_spec_type):
@@ -248,7 +261,13 @@ class CalibratedSpectrometer(spectrometer.Spectrometer, _calibratedspectrometerd
         """Gets a value indicating whether this device contains a factory calibration that can be restored."""
         return self._can_restore_factory_calibration
 
-    def restore_factory_calibration(self, restore_wavelengths, restore_nonlinearity, restore_dark_spectra, restore_spectral_sensitivity):
+    def restore_factory_calibration(
+        self,
+        restore_wavelengths,
+        restore_nonlinearity,
+        restore_dark_spectra,
+        restore_spectral_sensitivity,
+    ):
         """Restores the factory calibration."""
         raise NotImplementedError("No factory calibration available.")
 
@@ -279,6 +298,7 @@ class CalibratedSpectrometer(spectrometer.Spectrometer, _calibratedspectrometerd
     @property
     def wavelength_coefficients(self):
         return self._wavelength_coefficients
+
     @wavelength_coefficients.setter
     def wavelength_coefficients(self, value):
         self._wavelength_coefficients = value
@@ -307,7 +327,7 @@ class SpectrumData(object):
         except:
             _logger.debug("Instantiating " + str(SpectrumData.__class__))
 
-        self.Spectrum = [] # The spectrum as a float array
+        self.Spectrum = []  # The spectrum as a float array
         self.ExposureTime = float
         self.Averaging = 1
         self.TimeStamp = datetime
@@ -320,50 +340,49 @@ class SpectrumData(object):
         self.DarkAvg = 0.0
         self.ReadoutNoise = -1.0
 
+
 # Enumerations
 
 """An enumeration representing units of the y axis of a spectrum delivered from a spectrometer."""
 SpectrometerUnits = enum(
-        Unknown = 0,
-        ADCvalues = 1,
-        ADCnormalized = 2,
-        nWnm = 3,
-        nWm2nm = 4,
-        Wsrm2nm = 5,
-        Wsrnm = 6,
-        )
+    Unknown=0,
+    ADCvalues=1,
+    ADCnormalized=2,
+    nWnm=3,
+    nWm2nm=4,
+    Wsrm2nm=5,
+    Wsrnm=6,
+)
 
 """An enumeration representing the different pre-processing steps for spectra."""
 SpectrometerProcessing = enum(
-        AdjustOffset = 1,
-        CorrectNonlinearity = 2,
-        RemovePermanentBadPixels = 4,
-        SubractDark = 8,
-        RemoveTemporaryBadPixels = 16,
-        CompensateStrayLight = 32,
-        NormalizeExposureTime = 64,
-        SensitivityCalibration = 128,
-        SensitivitySmoothing = 256,
-        AdditionalFiltering = 512,
-        ScaleTo16BitRange = 1024,
-        )
+    AdjustOffset=1,
+    CorrectNonlinearity=2,
+    RemovePermanentBadPixels=4,
+    SubractDark=8,
+    RemoveTemporaryBadPixels=16,
+    CompensateStrayLight=32,
+    NormalizeExposureTime=64,
+    SensitivityCalibration=128,
+    SensitivitySmoothing=256,
+    AdditionalFiltering=512,
+    ScaleTo16BitRange=1024,
+)
 
 """An enumeration representing the possible results of an auto-exposure control cycle."""
 AutoExposureResults = enum(
-        NotChanged = 0,
-        Changed = 1,
-        TooMuchLight = 2,
-        TooLittleLight = 3,
-        NotAvailable = 4, # deprecated
-        )
+    NotChanged=0,
+    Changed=1,
+    TooMuchLight=2,
+    TooLittleLight=3,
+    NotAvailable=4,  # deprecated
+)
 
 """An enumeration representing the different types of auxiliary interfaces."""
 AuxInterfaces = enum(
-        NonePresent = 0,
-        I2C = 1,
-        SPI = 2,
-        RS232 = 3,
-        I2CLowLevel = 101,
-        )
-
-
+    NonePresent=0,
+    I2C=1,
+    SPI=2,
+    RS232=3,
+    I2CLowLevel=101,
+)
