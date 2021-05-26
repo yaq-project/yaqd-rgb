@@ -26,9 +26,6 @@ class RGBQmini(HasMapping, HasMeasureTrigger, IsSensor, IsDaemon):
         self._channel_mappings = {"intensities": ["wavelengths"]}
         self._mapping_units = {"wavelengths": "nm"}
 
-        if self._state["exposure_time"]:
-            self.spec.exposure_time = self._state["exposure_time"]
-
     async def _measure(self):
         self.spec.cancel_exposure()
         self.spec.exposure_time = self._state["exposure_time"]
@@ -42,7 +39,6 @@ class RGBQmini(HasMapping, HasMeasureTrigger, IsSensor, IsDaemon):
 
     def set_exposure_time(self, exposure_time: float):
         self._state["exposure_time"] = exposure_time
-        self.spec.exposure_time = exposure_time
 
     def get_exposure_time(self) -> float:
         return self._state["exposure_time"]
