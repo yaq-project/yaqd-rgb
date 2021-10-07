@@ -3,6 +3,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [Unreleased]
+
+### Changed
+- Convert exposure time field to property
+
+### Added
+- Additional methods for units and limits of exposure time
+
 ## [2021.5.1]
 
 ### Added

@@ -29,9 +29,21 @@ doc = "Set exposure time in seconds"
 response = "float"
 doc = "Get exposure time in seconds"
 
-[fields]
-[fields.exposure_time]
+[messages.get_exposure_time_units]
+response = "string"
+doc = "Get exposure time units (seconds)"
+
+[messages.get_exposure_time_limits]
+response = {"type"="array", "items"="float"}
+doc = "Get exposure time limits in seconds"
+
+[properties]
+[properties.exposure_time]
 getter = "get_exposure_time"
 setter = "set_exposure_time"
+units_getter = "get_exposure_time_units"
+limits_getter = "get_exposure_time_limits"
 type = "float"
+control_kind = "normal"
+record_kind = "metadata"
 

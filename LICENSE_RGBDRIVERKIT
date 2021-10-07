@@ -30,7 +30,7 @@ OF SUCH DAMAGE.
 
 Notice of changes from upstream:
 
-qseriesdriver.py was edited to avoid the call to `is_kernel_driver_active` on 
+qseriesdriver.py was edited to avoid the call to `is_kernel_driver_active` on
 Windows platform, as that method raises NotImplementedError.
 Otherwise, the library works as intended on Windows as well as Posix systems.
 
