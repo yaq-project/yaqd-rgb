@@ -1,7 +1,7 @@
 __all__ = ["RGBQmini"]
 
 import asyncio
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Tuple
 
 import numpy as np
 
@@ -42,3 +42,9 @@ class RGBQmini(HasMapping, HasMeasureTrigger, IsSensor, IsDaemon):
 
     def get_exposure_time(self) -> float:
         return self._state["exposure_time"]
+
+    def get_exposure_time_units(self) -> str:
+        return "s"
+
+    def get_exposure_time_limits(self) -> Tuple[float, float]:
+        return (self.spec.min_exposure_time, self.spec.max_exposure_time)
