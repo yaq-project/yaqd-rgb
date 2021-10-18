@@ -23,7 +23,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 ### Added
 - initial release
 
-[Unreleased]: https://gitlab.com/yaq/yaqd-rgb/-/compare/v2021.10.0...master
+[Unreleased]: https://gitlab.com/yaq/yaqd-rgb/-/compare/v2021.10.0...main
 [2021.10.0]: https://gitlab.com/yaq/yaqd-rgb/-/compare/v2021.5.1...v2021.10.0
 [2021.5.1]: https://gitlab.com/yaq/yaqd-rgb/-/compare/v2021.5.0...v2021.5.1
 [2021.5.0]: https://gitlab.com/yaq/yaqd-rgb/-/tags/v2021.5.0
