@@ -5,6 +5,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+## [2022.6.0]
+
+### Changed
+- Migrated to Github
+
 ## [2021.10.0]
 
 ### Changed
@@ -23,7 +28,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 ### Added
 - initial release
 
-[Unreleased]: https://gitlab.com/yaq/yaqd-rgb/-/compare/v2021.10.0...main
-[2021.10.0]: https://gitlab.com/yaq/yaqd-rgb/-/compare/v2021.5.1...v2021.10.0
-[2021.5.1]: https://gitlab.com/yaq/yaqd-rgb/-/compare/v2021.5.0...v2021.5.1
-[2021.5.0]: https://gitlab.com/yaq/yaqd-rgb/-/tags/v2021.5.0
+[Unreleased]: https://github.com/yaq-project/yaqd-rgb/compare/v2021.10.0...main
+[2022.6.0]: https://github.com/yaq-project/yaqd-rgb/compare/v2021.5.1...v2022.6.0
+[2021.10.0]: https://github.com/yaq-project/yaqd-rgb/compare/v2021.5.1...v2021.10.0
+[2021.5.1]: https://github.com/yaq-project/yaqd-rgb/compare/v2021.5.0...v2021.5.1
+[2021.5.0]: https://github.com/yaq-project/yaqd-rgb/releases/tag/v2021.5.0
