@@ -63,7 +63,7 @@ class Qseries(calibratedspectrometer.CalibratedSpectrometer):
         # user calibration starts at page 0, factory calibration starts at page calibr_num_pages
         self.__userdata_num_pages = 0
 
-        self.__max_ccd_value = 2 ** 16 - 1
+        self.__max_ccd_value = 2**16 - 1
 
         # Digital I/O ports
         self.__pin_config = [0] * 4

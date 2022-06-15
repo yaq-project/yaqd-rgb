@@ -12,3 +12,7 @@ yaq daemons for RGB Photonics hardware
 This package contains the following daemon(s):
 
 - https://yaq.fyi/daemons/rgb-qmini
+
+## maintainers
+
+- [Kent Meyer](https://github.com/kameyer226)
