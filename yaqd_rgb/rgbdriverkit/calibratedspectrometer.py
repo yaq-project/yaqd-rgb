@@ -37,7 +37,6 @@ class CalibratedSpectrometer(spectrometer.Spectrometer, _calibratedspectrometerd
     """
 
     def __init__(self):
-
         try:  # Python 3
             _logger.debug("Instantiating " + str(__class__))
             super().__init__()
@@ -211,12 +210,14 @@ class CalibratedSpectrometer(spectrometer.Spectrometer, _calibratedspectrometerd
 
     def load_user_data(self):
         """Loads user data from the device.
-        If supported by the spectrometer, you can use the User Data memory to store own data on the device."""
+        If supported by the spectrometer, you can use the User Data memory to store own data on the device.
+        """
         return None
 
     def save_user_data(self):
         """Save user data to the device.
-        If supported by the spectrometer, you can use the User Data memory to store your own data on the device"""
+        If supported by the spectrometer, you can use the User Data memory to store your own data on the device
+        """
         raise NotImplementedError("This spectrometer cannot store user data.")
 
     # --- Calibration Loading, Saving and Temperature

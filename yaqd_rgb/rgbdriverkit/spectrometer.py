@@ -115,7 +115,8 @@ class Spectrometer(devicedriver.Device):
     def wavelength_coefficients(self):
         """Gets the wavelength coefficients.
         Should be 4 elements containing constant [0], linear [1], quadratic [2] and cubic [3]
-        term of the 3rd order polynominal used for calculating the wavelengths. Wavelengths are in nm."""
+        term of the 3rd order polynominal used for calculating the wavelengths. Wavelengths are in nm.
+        """
         return self._wavelength_coefficients
 
     @wavelength_coefficients.setter
