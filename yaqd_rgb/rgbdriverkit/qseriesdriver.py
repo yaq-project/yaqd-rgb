@@ -730,7 +730,6 @@ class Qseries(calibratedspectrometer.CalibratedSpectrometer):
         return value[0]
 
     def __read_string(self, command):
-
         data_buffer = struct.pack("<I", command)
         data_buffer = self.__send_receive_data(data_buffer, 4)
         if len(data_buffer) < 4:
@@ -777,7 +776,6 @@ class Qseries(calibratedspectrometer.CalibratedSpectrometer):
     __writePipe = 0x01  # OUT endpoint
 
     def usbOpen(self):
-
         try:
             self.dev = self.__usbdev
         except:
